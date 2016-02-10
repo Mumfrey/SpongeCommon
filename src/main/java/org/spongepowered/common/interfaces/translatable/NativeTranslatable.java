@@ -22,35 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.mixin.core.data.types;
+package org.spongepowered.common.interfaces.translatable;
 
-import net.minecraft.block.BlockDirt;
-import org.spongepowered.api.data.type.DirtType;
-import org.spongepowered.asm.mixin.Implements;
-import org.spongepowered.asm.mixin.Interface;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
+import org.spongepowered.api.text.translation.Translatable;
 
-@Mixin(BlockDirt.DirtType.class)
-@Implements(@Interface(iface = DirtType.class, prefix = "shadow$"))
-public abstract class MixinBlockDirtDirtType implements NativeTranslatable {
+public interface NativeTranslatable extends Translatable {
 
-    @Shadow public abstract String getName();
-    @Shadow public abstract String getUnlocalizedName();
-
-    public String shadow$getId() {
-        return getName();
-    }
-
-    @Override
-    public String getLocalisationPrefix() {
-        return "tile.dirt";
+    default String getTranslationAsString() {
+        return this.getTranslation().get();
     }
     
-    @Override
-    public String getLocalisationStub() {
-        return this.getUnlocalizedName();
+    String getLocalisationPrefix();
+    
+    String getLocalisationStub();
+    
+    default String getLocalisationSuffix() {
+        return "name";
     }
-
+    
 }

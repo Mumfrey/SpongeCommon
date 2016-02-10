@@ -32,11 +32,12 @@ import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 
 @Mixin(BlockFlower.EnumFlowerType.class)
 @Implements(@Interface(iface = PlantType.class, prefix = "shadow$"))
-public abstract class MixinBlockFlowerEnumFlowerType {
+public abstract class MixinBlockFlowerEnumFlowerType implements NativeTranslatable {
 
     @Shadow public abstract String getName();
     @Shadow public abstract String getUnlocalizedName();
@@ -61,8 +62,10 @@ public abstract class MixinBlockFlowerEnumFlowerType {
         if (this.translation == null) {
             final BlockFlower.EnumFlowerColor blockType = getBlockType();
             if (blockType == BlockFlower.EnumFlowerColor.YELLOW) {
+                NOCOMPILE
                 this.translation = new SpongeTranslation("tile.flower1." + getUnlocalizedName() + ".name");
             } else if (blockType == BlockFlower.EnumFlowerColor.RED) {
+                NOCOMPILE
                 this.translation = new SpongeTranslation("tile.flower2." + getUnlocalizedName() + ".name");
             } else {
                 throw new IllegalStateException("Unknown flower color: " + blockType);

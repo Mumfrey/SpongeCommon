@@ -26,41 +26,31 @@ package org.spongepowered.common.mixin.core.data.types;
 
 import net.minecraft.block.BlockStone;
 import org.spongepowered.api.data.type.StoneType;
-import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
-import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.common.text.translation.SpongeTranslation;
+import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
 
 @Mixin(BlockStone.EnumType.class)
 @Implements(@Interface(iface = StoneType.class, prefix = "shadow$"))
-public abstract class MixinBlockStoneEnumType {
+public abstract class MixinBlockStoneEnumType implements NativeTranslatable {
 
     @Shadow public abstract String getName();
     @Shadow public abstract String getUnlocalizedName();
-
-    private String name;
-    private Translation translation;
 
     public String shadow$getId() {
         return getName();
     }
 
-    @Intrinsic
-    public String shadow$getName() {
-        if (this.name == null) {
-            this.name = shadow$getTranslation().get();
-        }
-        return this.name;
+    @Override
+    public String getLocalisationPrefix() {
+        return "tile.stone";
     }
-
-    public Translation shadow$getTranslation() {
-        if (this.translation == null) {
-            this.translation = new SpongeTranslation("tile.stone." + getUnlocalizedName() + ".name");
-        }
-        return this.translation;
+    
+    @Override
+    public String getLocalisationStub() {
+        return this.getUnlocalizedName();
     }
 
 }

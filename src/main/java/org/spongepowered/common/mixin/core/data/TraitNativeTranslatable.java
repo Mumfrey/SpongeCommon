@@ -22,44 +22,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.mixin.core.data.types;
+package org.spongepowered.common.mixin.core.data;
 
-import net.minecraft.block.BlockSandStone;
-import org.spongepowered.api.data.type.SandstoneType;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockStone;
+import net.minecraft.block.BlockStoneSlab;
+import net.minecraft.block.BlockStoneSlabNew;
+import net.minecraft.block.BlockTallGrass;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 
-@Mixin(BlockSandStone.EnumType.class)
-@Implements(@Interface(iface = SandstoneType.class, prefix = "shadow$"))
-public abstract class MixinBlockSandStoneEnumType {
-
-    @Shadow public abstract String getName();
-    @Shadow public abstract String getUnlocalizedName();
+@Mixin({
+    BlockStone.EnumType.class,
+    BlockStoneSlab.EnumType.class,
+    BlockTallGrass.EnumType.class,
+    BlockStoneSlabNew.EnumType.class,
+    BlockDirt.DirtType.class,
+    BlockDoublePlant.EnumPlantType.class
+})
+@Implements(@Interface(iface = NativeTranslatable.class, prefix = "translatable$"))
+public abstract class TraitNativeTranslatable implements NativeTranslatable {
 
     private String name;
     private Translation translation;
 
-    public String shadow$getId() {
-        return getName();
-    }
-
     @Intrinsic
-    public String shadow$getName() {
+    public String translatable$getName() {
         if (this.name == null) {
-            this.name = shadow$getTranslation().get();
+            this.name = this.getTranslationAsString();
         }
         return this.name;
     }
 
-    public Translation shadow$getTranslation() {
+    @Override
+    public Translation getTranslation() {
         if (this.translation == null) {
-            NOCOMPILE
-            this.translation = new SpongeTranslation("tile.sandStone." + getUnlocalizedName() + ".name");
+            this.translation = new SpongeTranslation(this);
         }
         return this.translation;
     }

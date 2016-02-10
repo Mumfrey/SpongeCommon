@@ -87,7 +87,7 @@ public abstract class MixinItem implements ItemType, IMixinItem, SpongeGameDicti
 
     @Override
     public Translation getTranslation() {
-        return new SpongeTranslation(getUnlocalizedName() + ".name");
+        return new SpongeTranslation("", getUnlocalizedName());
     }
 
     @Override

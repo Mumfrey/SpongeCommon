@@ -24,53 +24,44 @@
  */
 package org.spongepowered.common.mixin.core.data.types;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.BlockTallGrass;
 import org.spongepowered.api.data.type.ShrubType;
-import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
-import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.common.text.translation.SpongeTranslation;
+import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
+
+import java.util.Map;
 
 @Mixin(BlockTallGrass.EnumType.class)
 @Implements(@Interface(iface = ShrubType.class, prefix = "shadow$"))
-public abstract class MixinBlockTallGrassEnumType {
+public abstract class MixinBlockTallGrassEnumType implements NativeTranslatable {
 
     @Shadow public abstract String getName();
-
-    private String name;
-    private Translation translation;
+    
+    private static final Map<String, String> TRANSLATIONS = ImmutableMap.<String, String>of(
+        "dead_bush", "tallgrass.shrub",
+        "tall_grass", "tallgrass.grass",
+        "fern", "tallgrass.fern"
+    );
+    
+    private static final String DEFAULT_TRANSLATION = "tallgrass";
 
     public String shadow$getId() {
         return getName();
     }
 
-    @Intrinsic
-    public String shadow$getName() {
-        if (this.name == null) {
-            this.name = shadow$getTranslation().get();
-        }
-        return this.name;
+    @Override
+    public String getLocalisationPrefix() {
+        return "tile";
     }
-
-    public Translation shadow$getTranslation() {
-        if (this.translation == null) {
-            final String internalName = getName();
-            final String translationId;
-            if ("dead_bush".equals(internalName)) {
-                translationId = "tile.tallgrass.shrub.name";
-            } else if ("tall_grass".equals(internalName)) {
-                translationId = "tile.tallgrass.grass.name";
-            } else if ("fern".equals(internalName)) {
-                translationId = "tile.tallgrass.fern.name";
-            } else {
-                translationId = "tile.tallgrass.name";
-            }
-            this.translation = new SpongeTranslation(translationId);
-        }
-        return this.translation;
+    
+    @Override
+    public String getLocalisationStub() {
+        String id = MixinBlockTallGrassEnumType.TRANSLATIONS.get(this.getName());
+        return id != null ? id : MixinBlockTallGrassEnumType.DEFAULT_TRANSLATION;
     }
 
 }

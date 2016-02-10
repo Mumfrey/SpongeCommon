@@ -58,6 +58,7 @@ public abstract class MixinBlockPlanksEnumType {
 
     public Translation shadow$getTranslation() {
         if (this.translation == null) {
+            NOCOMPILE
             this.translation = new SpongeTranslation("tile.wood." + getUnlocalizedName() + ".name");
         }
         return this.translation;

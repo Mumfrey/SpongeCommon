@@ -58,6 +58,7 @@ public abstract class MixinBlockPrismarineEnumType {
 
     public Translation shadow$getTranslation() {
         if (this.translation == null) {
+            NOCOMPILE
             this.translation = new SpongeTranslation("tile.prismarine." + getUnlocalizedName() + ".name");
         }
         return this.translation;

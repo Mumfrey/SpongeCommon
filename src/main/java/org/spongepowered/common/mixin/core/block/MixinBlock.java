@@ -110,7 +110,7 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
 
     @Override
     public Translation getTranslation() {
-        return new SpongeTranslation(getUnlocalizedName() + ".name");
+        return new SpongeTranslation("", getUnlocalizedName());
     }
 
     @Override

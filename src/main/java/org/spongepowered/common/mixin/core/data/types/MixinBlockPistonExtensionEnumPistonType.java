@@ -66,6 +66,7 @@ public abstract class MixinBlockPistonExtensionEnumPistonType {
             } else {
                 translationId = "tile.pistonBase.name";
             }
+            NOCOMPILE
             this.translation = new SpongeTranslation(translationId);
         }
         return this.translation;

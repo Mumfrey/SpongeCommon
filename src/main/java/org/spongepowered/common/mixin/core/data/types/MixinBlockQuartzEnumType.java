@@ -58,6 +58,7 @@ public abstract class MixinBlockQuartzEnumType {
 
     public Translation shadow$getTranslation() {
         if (this.translation == null) {
+            NOCOMPILE
             this.translation = new SpongeTranslation("tile.quartzBlock." + unlocalizedName + ".name");
         }
         return this.translation;

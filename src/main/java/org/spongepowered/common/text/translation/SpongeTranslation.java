@@ -30,6 +30,7 @@ import com.google.common.base.Objects;
 import net.minecraft.util.StatCollector;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
+import org.spongepowered.common.interfaces.translatable.NativeTranslatable;
 
 import java.util.Locale;
 
@@ -37,6 +38,18 @@ import java.util.Locale;
 public class SpongeTranslation implements Translation {
 
     private final String id;
+
+    public SpongeTranslation(NativeTranslatable translatable) {
+        this(translatable.getLocalisationPrefix(), translatable.getLocalisationStub(), translatable.getLocalisationSuffix());
+    }
+    
+    public SpongeTranslation(String prefix, String stub) {
+        this(prefix, stub, "name");
+    }
+    
+    public SpongeTranslation(String prefix, String stub, String suffix) {
+        this(String.format("%s%s%s%s%s", checkNotNull(prefix), conditionalDot(prefix), checkNotNull(stub), conditionalDot(checkNotNull(suffix)), suffix));
+    }
 
     public SpongeTranslation(String id) {
         this.id = checkNotNull(id, "id");
@@ -85,6 +98,10 @@ public class SpongeTranslation implements Translation {
             return false;
         }
         return true;
+    }
+    
+    private static String conditionalDot(String string) {
+        return string.isEmpty() ? "" : ".";
     }
 
 }

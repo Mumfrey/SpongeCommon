@@ -129,6 +129,7 @@
         "data.MixinCustomDataHolder",
         "data.MixinDataHolder",
         "data.MixinPropertyHolder",
+        "data.TraitNativeTranslatable",
         "data.types.MixinArtType",
         "data.types.MixinBlockDirtDirtType",
         "data.types.MixinBlockDoorEnumHingePosition",

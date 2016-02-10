@@ -202,6 +202,7 @@ public abstract class MixinItemStack implements ItemStack, IMixinItemStack, IMix
 
     @Override
     public Translation getTranslation() {
+        NOCOMPILE
         return new SpongeTranslation(shadow$getItem().getUnlocalizedName((net.minecraft.item.ItemStack) (Object) this) + ".name");
     }
 
